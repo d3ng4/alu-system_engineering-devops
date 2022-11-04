@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
 # script to set HTTP response for two servers
-sudo apt-get -y install nginx
+REDIR="\\\tlocation /redirect_me {\n\t\t return 301 https://4hunnid.com/;\n\t}\n"
+ERRDIR="\\\n\terror_page 404 /custom_404.html;\n\tlocation = /custom_404.html {\n\t\troot /var/www/html;\n\t\tinternal;\n\t}\n"
+SRC="/etc/nginx/sites-enabled/default"
+HEADER="\\\n\tadd_header X-Served-By \$HOSTNAME;\n"
+apt-get -y update
+apt-get -y install nginx
+sudo service nginx start
 echo "Holberton School" | sudo tee /var/www/html/index.nginx-debian.html
-new_string="location /redirect_me {\nrewrite ^/(.*)$ https://4hunnid.com/;\n}\n"
-sed -i "/# Only/ i $new_string" /etc/nginx/sites-available/default
+sudo sed -i "30i $REDIR" $SRC
+sudo sed -i "28i $HEADER" $SRC
 echo "Ceci n'est pas une page" | sudo tee /var/www/html/custom_404.html
-replace="#error_page"
-new_string="error_page"
-sed -i "s/$replace/$new_string/" /etc/nginx/sites-available/default
-served_by="add_header X-Served-By $(cat /etc/hostname);"
-sudo sed -i "/index.htm;/ a $served_by" /etc/nginx/sites-enabled/default
+sudo sed -i "48i $ERRDIR" $SRC
 sudo service nginx restart
