@@ -19,4 +19,3 @@ sudo chown -R "$USER":"$USER" /etc/haproxy/haproxy.cfg
 sudo echo "ENABLED=1" >> /etc/default/haproxy
 sudo echo $load_balance_config >> /etc/haproxy/haproxy.cfg
 sudo service haproxy start
-~
