@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 # Fix Nginx default page
-sed -i 's/200/80/g' /etc/nginx/sites-enabled/default
+ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 service nginx restart
 pkill -1 nginx
